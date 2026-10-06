@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 # 01-install.sh - Arch Linux gaming + streaming installer (UEFI only)
-# Target: Ryzen 5 5600 / RX 5700 XT / B550M-K / NVMe 256GB (+ optional HDD for games)
-# Run from the Arch ISO live environment, as root, with internet connected.
+
 set -euo pipefail
 
 ############ EDIT THESE ############
-DISK="/dev/nvme0n1"      # system disk (WILL BE ERASED) - check with lsblk first
-HDD=""                   # e.g. /dev/sda -> formatted ext4, mounted at /mnt/storage (ERASED). Empty = skip
-HOST="archgame"
-USERNAME="famo"
+DISK="/dev/nvme0n1"
+HDD="/dev/sda1"
+HOST="archlinux"
+USERNAME="famouzak"
 TIMEZONE="Asia/Jakarta"
 KEYMAP="us"
 ####################################
