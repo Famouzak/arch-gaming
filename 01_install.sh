@@ -78,8 +78,6 @@ pacstrap -K /mnt \
 echo "=== 8. Generating FSTAB (Mount NVMe & HDD) ==="
 genfstab -U /mnt >> /mnt/etc/fstab
 
-# [FIX] Tambah nofail ke HDD -> sistem tetap boot kalo HDD dicabut/rusak
-# Data penting lo tetap aman, tapi sistem gak stuck kalo HDD bermasalah
 if grep -q "/mnt/wdblue" /mnt/etc/fstab; then
   sed -i '/\/mnt\/wdblue/ s/defaults/defaults,nofail/' /mnt/etc/fstab
   echo ">>> HDD mounted with 'nofail' option"
