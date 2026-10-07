@@ -47,12 +47,12 @@ echo "=== 4. Enable Multilib Repo ==="
 sed -i "/\[multilib\]/,/Include/ s/^#//" /etc/pacman.conf
 
 echo "=== 5. Drivers AMD RX 5700 XT, Audio PipeWire & KDE Plasma 6 ==="
-# [OPTIMASI] Gabung semua package dalam 1x pacman call (hemat roundtrip)
+# Arch Repository
 pacman -Syu --noconfirm --needed \
   mesa lib32-mesa \
   vulkan-radeon lib32-vulkan-radeon \
   libva-mesa-driver lib32-libva-mesa-driver \
-  lib32-vulkan-icd-loader vulkan-icd-loader \
+  lib32-vulkan-icd-loader vulkan-icd-loader vulkan-tools \
   pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber pavucontrol easyeffects lsp-plugins-lv2 calf alsa-utils \
   alacritty plasma-meta gwenview okular konsole dolphin kdeconnect kdenlive sddm wayland egl-wayland xdg-user-dirs \
   qt6-base qt6-declarative qt6-svg
@@ -77,7 +77,7 @@ echo "=== 7. Bootloader GRUB & Tools Snapper ==="
 pacman -S --noconfirm --needed \
   grub efibootmgr grub-btrfs snapper snap-pac inotify-tools os-prober pacman-contrib
 
-# [OPTIMASI] Early KMS untuk btrfs & amdgpu -> boot lebih cepat + snapshot boot reliable
+# Early KMS for btrfs & amdgpu -> faster boot + snapshot boot reliable
 sed -i 's/^MODULES=.*/MODULES=(btrfs amdgpu)/' /etc/mkinitcpio.conf
 mkinitcpio -P
 
