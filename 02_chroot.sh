@@ -77,16 +77,49 @@ echo "=== 7. Bootloader GRUB & Tools Snapper ==="
 pacman -S --noconfirm --needed \
   grub efibootmgr grub-btrfs snapper snap-pac inotify-tools os-prober pacman-contrib
 
-# Early KMS for btrfs & amdgpu -> faster boot + snapshot boot reliable
-sed -i 's/^MODULES=.*/MODULES=(btrfs amdgpu)/' /etc/mkinitcpio.conf
-mkinitcpio -P
+# Install HyperFluent Theme GRUB (Varian Arch Linux)
+mkdir -p /boot/grub/themes
+rm -rf /tmp/hyperfluent-grub /boot/grub/themes/HyperFluent
+git clone --depth=1 https://github.com/Coopydood/HyperFluent-GRUB-Theme.git /tmp/hyperfluent-grub
 
-# Set Kernel Zen as Default
-if ! grep -q "GRUB_TOP_LEVEL" /etc/default/grub; then
+# Copy 'arch' folder to Grub Theme
+cp -r /tmp/hyperfluent-grub/arch /boot/grub/themes/HyperFluent
+rm -rf /tmp/hyperfluent-grub
+
+# 1. Set Timeout & Monitor Resolution
+sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=3/' /etc/default/grub
+sed -i 's/^#GRUB_GFXMODE=.*/GRUB_GFXMODE=1920x1080x32,auto/' /etc/default/grub
+
+# 2. Disable Sub Menu
+sed -i 's/^#GRUB_DISABLE_SUBMENU=.*/GRUB_DISABLE_SUBMENU=y/' /etc/default/grub
+grep -q "^GRUB_DISABLE_SUBMENU=" /etc/default/grub || echo 'GRUB_DISABLE_SUBMENU=y' >> /etc/default/grub
+
+# 3. Set to gfxterm mode
+if grep -q "^#GRUB_TERMINAL_OUTPUT=" /etc/default/grub; then
+  sed -i 's/^#GRUB_TERMINAL_OUTPUT=.*/GRUB_TERMINAL_OUTPUT="gfxterm"/' /etc/default/grub
+elif ! grep -q "^GRUB_TERMINAL_OUTPUT=" /etc/default/grub; then
+  echo 'GRUB_TERMINAL_OUTPUT="gfxterm"' >> /etc/default/grub
+fi
+
+# 4. Set Path for HyperFluent Theme
+if grep -q "^GRUB_THEME=" /etc/default/grub; then
+  sed -i 's|^GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/HyperFluent/theme.txt"|' /etc/default/grub
+else
+  echo 'GRUB_THEME="/boot/grub/themes/HyperFluent/theme.txt"' >> /etc/default/grub
+fi
+
+# 5. Set Kernel Zen as Default 
+if grep -q "^GRUB_TOP_LEVEL=" /etc/default/grub; then
+  sed -i 's|^GRUB_TOP_LEVEL=.*|GRUB_TOP_LEVEL="/boot/vmlinuz-linux-zen"|' /etc/default/grub
+else
   echo 'GRUB_TOP_LEVEL="/boot/vmlinuz-linux-zen"' >> /etc/default/grub
 fi
 
-# Set Grub Install
+# Early KMS for Btrfs & AMDGPU
+sed -i 's/^MODULES=.*/MODULES=(btrfs amdgpu)/' /etc/mkinitcpio.conf
+mkinitcpio -P
+
+# Install GRUB & Generate Config File
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable
 grub-mkconfig -o /boot/grub/grub.cfg
 
