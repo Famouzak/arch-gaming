@@ -38,7 +38,7 @@ passwd
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 echo "=== 3. Optimize Pacman Config ==="
-# [OPTIMASI] ParallelDownloads, Color, ILoveCandy untuk install lebih cepat
+# [Enable] ParallelDownloads, Color, ILoveCandy
 sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
 sed -i 's/^#Color/Color/' /etc/pacman.conf
 grep -q "^ILoveCandy" /etc/pacman.conf || sed -i '/^Color/a ILoveCandy' /etc/pacman.conf
@@ -46,7 +46,7 @@ grep -q "^ILoveCandy" /etc/pacman.conf || sed -i '/^Color/a ILoveCandy' /etc/pac
 echo "=== 4. Enable Multilib Repo ==="
 sed -i "/\[multilib\]/,/Include/ s/^#//" /etc/pacman.conf
 
-echo "=== 5. Drivers AMD RX 5700 XT, Audio PipeWire & KDE Plasma 6 ==="
+echo "=== 5. Drivers for AMD GPU, Audio PipeWire & KDE Plasma 6 ==="
 # Arch Repository
 pacman -Syu --noconfirm --needed \
   mesa lib32-mesa \
