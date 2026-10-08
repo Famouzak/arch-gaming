@@ -19,8 +19,8 @@ echo "----------------------------------------"
 
 echo "=== 1. Sync Clock & Update Mirrorlist ==="
 timedatectl set-ntp true
-# [FIX] -Syu instead of -Sy untuk hindari partial upgrade
-pacman -Syu --noconfirm reflector
+
+pacman -Sy --noconfirm reflector
 echo "Searching for the fastest mirror ..."
 reflector --country Indonesia,Singapore --protocol https --latest 15 --download-timeout 5 --sort rate --save /etc/pacman.d/mirrorlist
 
