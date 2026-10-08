@@ -74,7 +74,7 @@ if [ -d "/mnt/wdblue" ]; then
 fi
 
 echo "=== 8. Setup Ocypus Gamma A40 Digital Cooler Display ==="
-sudo pacman -S --noconfirm --needed python python-pip python-hidapi python-psutil
+sudo pacman -S --noconfirm --needed python python-pip python-hid python-psutil
 
 OCYPUS_SRC="/mnt/wdblue/ocypus-a40-digital-linux"
 
