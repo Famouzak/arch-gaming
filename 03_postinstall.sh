@@ -28,7 +28,7 @@ sudo pacman -S --noconfirm --needed \
   mangohud lib32-mangohud goverlay lact \
   obs-studio obs-studio-plugin-browser ffmpeg vlc mpv gstreamer  \
   gnutls lib32-gnutls giflib \
-  v4l2loopback-dkms v4l2loopback-utils
+  v4l2loopback-dkms v4l2loopback-utils flatpak
 
 echo "=== 4. Install AUR Package ==="
 yay -S --noconfirm --needed \
