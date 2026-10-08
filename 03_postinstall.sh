@@ -24,9 +24,9 @@ fi
 echo "=== 3. Install Gaming & Streaming Tools (Arch Repos) ==="
 sudo pacman -S --noconfirm --needed \
   steam wine-staging winetricks \
-  gamemode lib32-gamemode \
+  gamemode lib32-gamemode gamescope \
   mangohud lib32-mangohud goverlay lact \
-  obs-studio ffmpeg vlc mpv gstreamer gamescope \
+  obs-studio obs-studio-plugin-browser ffmpeg vlc mpv gstreamer  \
   gnutls lib32-gnutls giflib \
   v4l2loopback-dkms v4l2loopback-utils
 
@@ -56,21 +56,9 @@ sudo systemctl enable --now snapper-cleanup.timer
 sudo snapper -c root set-config ALLOW_USERS=$USER SYNC_USER=yes
 
 echo "=== 7. Setup Access HDD WD Blue (/mnt/wdblue) ==="
-# [FIX] JANGAN chown -R karena bisa ubah ownership data penting di HDD
-# Pakai ACL aja biar user dapet akses tanpa ngerusak ownership existing
+
 if [ -d "/mnt/wdblue" ]; then
-  # Cek apakah filesystem support ACL (ext4 biasanya support by default)
-  if sudo tune2fs -l "$(findmnt -no SOURCE /mnt/wdblue)" 2>/dev/null | grep -q "acl"; then
-    echo ">>> Applying ACL for user $USER on /mnt/wdblue ..."
-    sudo setfacl -R  -m "u:$USER:rwx" /mnt/wdblue 2>/dev/null || true
-    sudo setfacl -R -d -m "u:$USER:rwx" /mnt/wdblue 2>/dev/null || true
-    echo ">>> ACL applied. Existing ownership preserved."
-  else
-    echo ">>> WARNING: /mnt/wdblue tidak support ACL."
-    echo ">>> User $USER mungkin gak bisa write ke HDD."
-    echo ">>> Solusi manual: tambah user ke group pemilik HDD, atau"
-    echo ">>>   sudo mount -o remount,acl /mnt/wdblue (jika ext4 support)"
-  fi
+  sudo chown -R $USER:$USER /mnt/wdblue
 fi
 
 echo "=== 8. Setup Ocypus Gamma A40 Digital Cooler Display ==="
@@ -103,8 +91,8 @@ else
   echo "Warning: Folder $OCYPUS_SRC are not found. Setup Ocypus --Skipping."
 fi
 
-echo "=== 9. Cleanup Package Cache (hemat ruang NVMe) ==="
-# [OPTIMASI] NVMe lo cuma 256GB -> cleanup cache penting
+echo "=== 9. Cleanup Package Cache ==="
+
 sudo paccache -rk1
 sudo paccache -ruk0
 yay -Sc --noconfirm || true
