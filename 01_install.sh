@@ -30,7 +30,7 @@ parted -s $NVME mklabel gpt
 parted -s $NVME mkpart ESP fat32 1MiB 1024MiB             # 1 GB EFI
 parted -s $NVME set 1 esp on
 parted -s $NVME mkpart primary linux-swap 1024MiB 5120MiB # 4 GB Swap
-parted -s $NVME mkpart primary btrfs 5120MiB 100%         # Sisa ~251 GB Btrfs
+parted -s $NVME mkpart primary btrfs 5120MiB 100%         # ~251 GB Btrfs
 
 BOOT_PART="${NVME}p1"
 SWAP_PART="${NVME}p2"
