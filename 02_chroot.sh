@@ -77,7 +77,7 @@ echo "=== 7. Bootloader GRUB & Tools Snapper ==="
 pacman -S --noconfirm --needed \
   grub efibootmgr grub-btrfs snapper snap-pac inotify-tools os-prober pacman-contrib
 
-# Install HyperFluent Theme GRUB (Varian Arch Linux)
+# Install HyperFluent Theme GRUB for Arch Linux
 mkdir -p /boot/grub/themes
 rm -rf /tmp/hyperfluent-grub /boot/grub/themes/HyperFluent
 git clone --depth=1 https://github.com/Coopydood/HyperFluent-GRUB-Theme.git /tmp/hyperfluent-grub
@@ -137,3 +137,4 @@ if [ -f /root/scripts/03_postinstall.sh ]; then
 fi
 
 echo "=== Chroot Configuration Is Finished! ==="
+echo "=== type 'exit' then 'reboot' ==="
