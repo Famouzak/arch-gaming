@@ -87,12 +87,19 @@ systemctl enable NetworkManager
 systemctl enable sddm
 systemctl enable grub-btrfsd
 
-echo "=== 8. Persiapan Post-Install Script ==="
-if [ -f /root/scripts/03_postinstall.sh ]; then
-  cp /root/scripts/03_postinstall.sh /home/$USERNAME/
-  chown $USERNAME:$USERNAME /home/$USERNAME/03_postinstall.sh
-  chmod +x /home/$USERNAME/03_postinstall.sh
-  echo "File 03_postinstall.sh berhasil disalin ke /home/$USERNAME/"
+echo "=== 8. Persiapan Post-Install Script & Dotfiles ==="
+TARGET_DIR="/home/$USERNAME/arch-gaming"
+mkdir -p "$TARGET_DIR"
+
+# Salin seluruh isi repositori (skrip postinstall, terminal, dan folder dotfiles)
+if [ -d "/root/arch-gaming" ]; then
+  cp -r /root/arch-gaming/* "$TARGET_DIR/"
+elif [ -d "/root/scripts" ]; then
+  cp -r /root/scripts/* "$TARGET_DIR/"
 fi
+
+# Atur kepemilikan user dan hak akses eksekusi skrip
+chown -R $USERNAME:$USERNAME "$TARGET_DIR"
+chmod +x "$TARGET_DIR"/*.sh 2>/dev/null || true
 
 echo "=== Chroot Configuration Selesai! ==="
