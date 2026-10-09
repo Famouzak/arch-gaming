@@ -19,7 +19,7 @@ echo "----------------------------------------"
 
 echo "=== 1. Sync Network Time & Optimize Mirrorlist ==="
 timedatectl set-ntp true
-pacman -Sy --noconfirm reflector
+
 echo "Evaluating fastest mirrors (Indonesia & Singapore)..."
 reflector --country Indonesia,Singapore --protocol https --latest 15 --download-timeout 5 --sort rate --save /etc/pacman.d/mirrorlist
 
@@ -39,7 +39,7 @@ echo "=== 3. Formatting NVMe Partitions ==="
 mkfs.fat -F32 -n "EFI" $BOOT_PART
 mkswap -L "ARCH_SWAP" $SWAP_PART
 swapon $SWAP_PART
-mkfs.btrfs -f -L "ARCH_ROOT" $ROOT_PART
+mkfs.btrfs -f -L "ARCH_LINUX" $ROOT_PART
 
 echo "=== 4. Provisioning Btrfs Subvolumes ==="
 mount $ROOT_PART /mnt
@@ -62,7 +62,7 @@ mount -o $BTRFS_OPTS,subvol=@var_log $ROOT_PART /mnt/var/log
 mount -o $BTRFS_OPTS,subvol=@pkg $ROOT_PART /mnt/var/cache/pacman/pkg
 mount $BOOT_PART /mnt/boot/efi
 
-echo "=== 6. Mounting Secondary Storage (WD BLUE HDD) ==="
+echo "=== 6. Mounting Secondary Storage  ==="
 mount $HDD_PART /mnt/mnt/wdblue
 
 echo "=== 7. Bootstrapping Base System & Kernels ==="
@@ -72,7 +72,7 @@ pacstrap -K /mnt \
   linux-lts linux-lts-headers \
   linux-zen linux-zen-headers \
   linux-firmware amd-ucode \
-  btrfs-progs neovim git networkmanager sudo reflector
+  btrfs-progs neovim git nano pacman networkmanager sudo reflector
 
 echo "=== 8. Generating FSTAB Table ==="
 genfstab -U /mnt >> /mnt/etc/fstab
