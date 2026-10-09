@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# Lokasi direktori tempat skrip ini berada (otomatis mendeteksi folder repo)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DOTFILES_DIR="$SCRIPT_DIR/dotfiles"
+
 # Pastikan skrip TIDAK dijalankan sebagai root/sudo
 if [ "$EUID" -eq 0 ]; then
   echo "ERROR: Jangan jalankan skrip ini dengan sudo!"
@@ -33,10 +37,11 @@ sudo pacman -S --noconfirm --needed \
   gnutls lib32-gnutls giflib \
   v4l2loopback-dkms v4l2loopback-utils
 
-echo "=== 5. Install Aplikasi AUR (Brave, ProtonUp-Qt, Proton-GE, lib32-giflib) ==="
+echo "=== 5. Install Aplikasi AUR (Brave, Plasma Themes, Proton) ==="
 yay -S --noconfirm --needed \
   brave-bin \
   darkly-bin \
+  plasma6-applets-andromeda-launcher-git \
   protonup-qt \
   proton-ge-custom-bin \
   lib32-giflib
@@ -91,6 +96,43 @@ EOF'
   echo "Ocypus LCD Display berhasil dikonfigurasi!"
 else
   echo "Peringatan: Folder $OCYPUS_SRC tidak ditemukan di HDD. Setup Ocypus dilewati."
+fi
+
+echo "=== 10. Restorasi Dotfiles (KDE Plasma, Layout & Wallpaper) ==="
+if [ -d "$DOTFILES_DIR" ]; then
+  mkdir -p ~/.config ~/.local/share/wallpapers ~/.local/share/konsole
+
+  # Restorasi Wallpaper
+  if [ -f "$DOTFILES_DIR/wallpaper/favorite.jpg" ]; then
+    cp "$DOTFILES_DIR/wallpaper/favorite.jpg" ~/.local/share/wallpapers/
+  fi
+
+  # Restorasi Konfigurasi Taskbar & Andromeda Launcher
+  [ -f "$DOTFILES_DIR/plasma/plasma-org.kde.plasma.desktop-appletsrc" ] && cp "$DOTFILES_DIR/plasma/plasma-org.kde.plasma.desktop-appletsrc" ~/.config/
+  [ -f "$DOTFILES_DIR/plasma/plasmashellrc" ] && cp "$DOTFILES_DIR/plasma/plasmashellrc" ~/.config/
+  [ -f "$DOTFILES_DIR/plasma/kdeglobals" ] && cp "$DOTFILES_DIR/plasma/kdeglobals" ~/.config/
+
+  # Restorasi Profil Konsole
+  [ -f "$DOTFILES_DIR/konsole/konsolerc" ] && cp "$DOTFILES_DIR/konsole/konsolerc" ~/.config/
+  if [ -d "$DOTFILES_DIR/konsole/profiles" ]; then
+    cp -r "$DOTFILES_DIR/konsole/profiles/"* ~/.local/share/konsole/ 2>/dev/null || true
+  fi
+
+  # Apply Theme & Wallpaper via CLI
+  plasma-apply-colorscheme Darkly || true
+  if [ -f ~/.local/share/wallpapers/favorite.jpg ]; then
+    plasma-apply-wallpaperimage ~/.local/share/wallpapers/favorite.jpg || true
+  fi
+else
+  echo "Peringatan: Folder dotfiles tidak ditemukan di $DOTFILES_DIR. Ricing Plasma dilewati."
+fi
+
+echo "=== 11. Eksekusi Terminal Ricing (04_terminal.sh) ==="
+if [ -f "$SCRIPT_DIR/04_terminal.sh" ]; then
+  chmod +x "$SCRIPT_DIR/04_terminal.sh"
+  "$SCRIPT_DIR/04_terminal.sh"
+else
+  echo "Peringatan: Skrip $SCRIPT_DIR/04_terminal.sh tidak ditemukan."
 fi
 
 echo "======================================================"
