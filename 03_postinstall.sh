@@ -35,7 +35,7 @@ sudo pacman -S --noconfirm --needed \
   mangohud lib32-mangohud goverlay lact \
   obs-studio obs-studio-plugin-browser ffmpeg vlc mpv gstreamer \
   gnutls lib32-gnutls giflib \
-  v4l2loopback-dkms v4l2loopback-utils
+  v4l2loopback-dkms v4l2loopback-utils flatpak
 
 echo "=== 5. Deploy AUR Packages (Brave, Desktop Themes, Proton) ==="
 yay -S --noconfirm --needed \
@@ -44,6 +44,9 @@ yay -S --noconfirm --needed \
   protonup-qt \
   proton-ge-custom-bin \
   lib32-giflib
+
+echo "=== Install Apps From Flatpak ==="
+flatpak install flathub org.vinegarhq.Sober
 
 echo "=== Install Andromeda Launcher Widget ==="
 rm -rf /tmp/andromeda-launcher
