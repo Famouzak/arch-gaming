@@ -55,11 +55,11 @@ cat << 'EOF' > ~/.blerc
 bleopt complete_auto_history=1
 bleopt complete_auto_complete=1
 
-ble-face -s command_builtin="fg=#89b4fa,bold"
-ble-face -s command_alias="fg=#94e2d5"
-ble-face -s command_function="fg=#cba6f7"
-ble-face -s filename_directory="fg=#89b4fa,underline"
-ble-face -s auto_complete="fg=#585b70,italic"
+ble-face command_builtin="fg=#89b4fa,bold"
+ble-face command_alias="fg=#94e2d5"
+ble-face command_function="fg=#cba6f7"
+ble-face filename_directory="fg=#89b4fa,underline"
+ble-face auto_complete="fg=#585b70,italic"
 EOF
 
 # 3. ~/.config/starship.toml
