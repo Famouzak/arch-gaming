@@ -31,9 +31,9 @@ fi
 echo "=== 4. Deploy Gaming & Streaming Software Stack (Official Repos) ==="
 sudo pacman -S --noconfirm --needed \
   steam wine-staging winetricks \
-  gamemode lib32-gamemode \
+  gamemode lib32-gamemode gamescope \
   mangohud lib32-mangohud goverlay lact \
-  obs-studio ffmpeg vlc mpv gstreamer \
+  obs-studio obs-studio-plugin-browser ffmpeg vlc mpv gstreamer \
   gnutls lib32-gnutls giflib \
   v4l2loopback-dkms v4l2loopback-utils
 
@@ -41,10 +41,15 @@ echo "=== 5. Deploy AUR Packages (Brave, Desktop Themes, Proton) ==="
 yay -S --noconfirm --needed \
   brave-bin \
   darkly-bin \
-  plasma6-applets-andromeda-launcher-git \
   protonup-qt \
   proton-ge-custom-bin \
   lib32-giflib
+
+echo "=== Install Andromeda Launcher Widget ==="
+rm -rf /tmp/andromeda-launcher
+git clone https://github.com/EliverLara/AndromedaLauncher.git /tmp/andromeda-launcher
+kpackagetool6 -t Plasma/Applet -i /tmp/andromeda-launcher || kpackagetool6 -t Plasma/Applet -u /tmp/andromeda-launcher
+rm -rf /tmp/andromeda-launcher
 
 echo "=== 6. Enable LACT Service (AMD GPU Control) ==="
 sudo systemctl enable --now lactd
@@ -69,7 +74,7 @@ if [ -d "/mnt/wdblue" ]; then
 fi
 
 echo "=== 9. Deploy Ocypus Gamma A40 Digital Cooler Driver ==="
-sudo pacman -S --noconfirm --needed python python-pip python-hidapi python-psutil
+sudo pacman -S --noconfirm --needed python python-pip python-hid python-psutil
 
 OCYPUS_SRC="/mnt/wdblue/ocypus-a40-digital-linux"
 
