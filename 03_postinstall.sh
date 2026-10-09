@@ -81,4 +81,63 @@ if [ -d "$OCYPUS_SRC" ]; then
   # Generate udev rule for USB device access
   sudo bash -c 'cat > /etc/udev/rules.d/99-ocypus-a40.rules << EOF
 # Ocypus Gamma A40 ARGB Digital - LCD & RGB Control
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a2c", ATTRS{idProduct}=="434d", GROUP="input", MODE="066
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a2c", ATTRS{idProduct}=="434d", GROUP="input", MODE="0660"
+EOF'
+
+  sudo udevadm control --reload
+  sudo udevadm trigger
+
+  # Install & activate systemd service
+  cd "$HOME/ocypus-a40-digital-linux"
+  sudo ./ocypus-control.py install-service -u c -s k10temp -r 2.0 --model gamma
+  sudo systemctl daemon-reload
+  sudo systemctl enable --now ocypus-lcd.service
+  cd ~
+  echo "Ocypus LCD Display successfully configured!"
+else
+  echo "WARNING: Directory $OCYPUS_SRC not found. Skipping Ocypus setup."
+fi
+
+echo "=== 10. Restore Desktop Dotfiles (KDE Plasma, Panel Layout, & Wallpaper) ==="
+if [ -d "$DOTFILES_DIR" ]; then
+  mkdir -p ~/.config ~/.local/share/wallpapers ~/.local/share/konsole
+
+  # Restore Desktop Wallpaper
+  if [ -f "$DOTFILES_DIR/wallpaper/favorite.jpg" ]; then
+    cp "$DOTFILES_DIR/wallpaper/favorite.jpg" ~/.local/share/wallpapers/
+  fi
+
+  # Restore Panel, Launcher, & Desktop Configuration
+  [ -f "$DOTFILES_DIR/plasma/plasma-org.kde.plasma.desktop-appletsrc" ] && cp "$DOTFILES_DIR/plasma/plasma-org.kde.plasma.desktop-appletsrc" ~/.config/
+  [ -f "$DOTFILES_DIR/plasma/plasmashellrc" ] && cp "$DOTFILES_DIR/plasma/plasmashellrc" ~/.config/
+  [ -f "$DOTFILES_DIR/plasma/kdeglobals" ] && cp "$DOTFILES_DIR/plasma/kdeglobals" ~/.config/
+
+  # Restore Konsole Profiles & Color Schemes
+  [ -f "$DOTFILES_DIR/konsole/konsolerc" ] && cp "$DOTFILES_DIR/konsole/konsolerc" ~/.config/
+  if [ -d "$DOTFILES_DIR/konsole/profiles" ]; then
+    cp -r "$DOTFILES_DIR/konsole/profiles/"* ~/.local/share/konsole/ 2>/dev/null || true
+  fi
+
+  # Apply Active Color Scheme & Wallpaper via CLI
+  plasma-apply-colorscheme Darkly || true
+  if [ -f ~/.local/share/wallpapers/favorite.jpg ]; then
+    plasma-apply-wallpaperimage ~/.local/share/wallpapers/favorite.jpg || true
+  fi
+else
+  echo "WARNING: Dotfiles directory not found at $DOTFILES_DIR. Skipping Plasma desktop deployment."
+fi
+
+echo "=== 11. Execute Terminal Ricing Script ==="
+if [ -f "$SCRIPT_DIR/04_terminal.sh" ]; then
+  chmod +x "$SCRIPT_DIR/04_terminal.sh"
+  "$SCRIPT_DIR/04_terminal.sh"
+elif [ -f "$SCRIPT_DIR/terminal.sh" ]; then
+  chmod +x "$SCRIPT_DIR/terminal.sh"
+  "$SCRIPT_DIR/terminal.sh"
+else
+  echo "WARNING: Terminal ricing script not found."
+fi
+
+echo "======================================================"
+echo "=== Post-Install Deployment Complete! System Ready. ==="
+echo "======================================================"
