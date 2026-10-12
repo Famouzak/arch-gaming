@@ -66,7 +66,7 @@ EOF
 cat << 'EOF' > ~/.config/starship.toml
 format = """
 [░▒▓](#7aa2f7)\
-[  ](bg:#7aa2f7 fg:#1d202f)\
+[  ](bg:#7aa2f7 fg:#1d202f)\
 [](fg:#7aa2f7 bg:#3b4261)\
 $directory\
 [](fg:#3b4261 bg:#7dcfff)\
@@ -85,7 +85,7 @@ format = "[ $path ]($style)"
 truncation_length = 3
 
 [git_branch]
-symbol = ""
+symbol = ""
 style = "bg:#7dcfff fg:#15161e"
 format = '[ $symbol $branch ]($style)'
 
