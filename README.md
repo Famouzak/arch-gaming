@@ -58,9 +58,11 @@ Brave Browser , Darkly-Bin
 == SCRYPTS == 
 Custom Scrypt to Run LED CPU MONITORING for OCYPUS A40 GAMMA
 
-=============================================
-        HOW TO USE THIS SCRYPTS
-=============================================
+==========================
+       
+ HOW TO USE THIS SCRYPTS
+
+==========================
 
 
 BOOT INTO ARCH LINUX LIVE ISO
@@ -71,15 +73,17 @@ $ pacman -Sy git
 
 Clone the Repo
 
-$ git clone https://github.com/Famouzak/arch-gaming-kde.git
+$ git clone https://github.com/Famouzak/arch-gaming.git
 
-$ cd arch-gaming-kde $ chmod +x *.sh
+$ cd arch-gaming 
+$ chmod +x *.sh
 
 Run the Scrypt
 
-$./01_install.sh
+$ ./01_install.sh
 
-After Step 01, it will automatically running 02_chroot.sh
+After Step 01, it will automatically running 
+$ 02_chroot.sh
 
 You will be prompted to Make HOSTNAME & USERNAME
 
