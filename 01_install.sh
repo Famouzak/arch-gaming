@@ -21,7 +21,7 @@ echo "=== 1. Sync Network Time & Optimize Mirrorlist ==="
 timedatectl set-ntp true
 
 echo "Evaluating fastest mirrors (Indonesia & Singapore)..."
-reflector --country Indonesia,Singapore --protocol https --latest 15 --download-timeout 5 --sort rate --save /etc/pacman.d/mirrorlist
+reflector --country Indonesia,Singapore --protocol https --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 
 echo "=== 2. Partitioning NVMe Drive ($NVME) ==="
 sgdisk --zap-all $NVME
