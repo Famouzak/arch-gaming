@@ -24,25 +24,36 @@ CONDENSER MIC
 Arch Linux Setup :
 
 == KERNEL == 
+
 ARCH LINUX ZEN (Default) , ARCH LINUX , ARCH LINUX-LTS
 
 == BOOTLOADER == 
-GRUB
+
+GRUB (HyperFluent Arch Linux Theme)
 
 == DESKTOP ENVIRONTMENT == 
+
 KDE PLASMA (PLASMA-META)
 
 == AUDIO == 
 PIPEWIRE
 
-== FILE SYSTEM == 
-BTRFS With snapper SWAP 4 GB
+== FILE SYSTEM ==
+
+BTRFS With snapper
+SWAP 4 GB
 
 NVME = BTRFS , HDD = EXT4
 
 == Apps == 
-Pacman ; Steam, Obs-Studio, Lact, Goverlay, Pavucontrol, Easyeffects, Kdenlive, Dolphin, Gwenview, Okular, Vlc, Mpv
-AUR ; Brave Browser , Darkly-Bin
+
+Pacman :
+
+Steam, Obs-Studio, Lact, Goverlay, Pavucontrol, Easyeffects, Kdenlive, Dolphin, Gwenview, Okular, Vlc, Mpv, flatpak
+
+AUR :
+
+Brave Browser , Darkly-Bin
 
 == SCRYPTS == 
 Custom Scrypt to Run LED CPU MONITORING for OCYPUS A40 GAMMA
@@ -50,6 +61,8 @@ Custom Scrypt to Run LED CPU MONITORING for OCYPUS A40 GAMMA
 =============================================
         HOW TO USE THIS SCRYPTS
 =============================================
+
+
 BOOT INTO ARCH LINUX LIVE ISO
 
 $ pacman -Sy
@@ -72,7 +85,8 @@ You will be prompted to Make HOSTNAME & USERNAME
 
 after finished , type
 
-$ exit $ reboot
+$ exit 
+$ reboot
 
 Booting on KDE PLASMA
 
@@ -82,4 +96,4 @@ $ ./03_postinstall.sh
 
 optional
 
-./04_terminal.sh (ricing alacritty & konsole)
+$ ./04_terminal.sh (ricing alacritty & konsole)
